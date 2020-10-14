@@ -8,6 +8,7 @@ TagManager:
   - Void
   - Gem
   - Score
+  - EndPortal
   layers:
   - Default
   - TransparentFX

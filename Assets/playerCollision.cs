@@ -5,18 +5,27 @@ using UnityEngine;
 public class playerCollision : MonoBehaviour
 {
     public bool isGrounded;
+    public bool isAtEnd;
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
-            isGrounded = true;
-        if (collision.gameObject.CompareTag("Void"))
-            FindObjectOfType<gameManager>().GameOver();
+        // Get foot collider (box collider) from player
+        if (collision.otherCollider.GetType() == typeof(BoxCollider2D))
+        {
+            if (collision.gameObject.CompareTag("Ground"))
+                isGrounded = true;
+            if (collision.gameObject.CompareTag("Void"))
+                FindObjectOfType<gameManager>().GameOver();
+        }
     }
 
     void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
-            isGrounded = false;
+        // Get foot collider (box collider) from player
+        if (collision.otherCollider.GetType() == typeof(BoxCollider2D))
+        {
+            if (collision.gameObject.CompareTag("Ground"))
+                isGrounded = false;
+        }       
     }
 }

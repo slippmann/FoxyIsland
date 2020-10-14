@@ -4,23 +4,26 @@ using UnityEngine;
 
 public class playerMovement : MonoBehaviour
 {
+    public float speedError = 0.1f;
     public float runningSpeed = 6;
     public float jumpVelocity = 6;
     public float minX = 7;
     public float maxX = 20;
     public bool isJumping = false;
 
-    private BoxCollider2D boxCollider;
     private Rigidbody2D rigidBody;
     private Animator animator;
     private playerCollision collisionManager;
 
+    private houseManager endManager;
+
     void Start()
     {
-        boxCollider = GetComponent<BoxCollider2D>();
         rigidBody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         collisionManager = GetComponent<playerCollision>();
+
+        endManager = FindObjectOfType<houseManager>();
     }
 
     // Update is called once per frame
@@ -30,6 +33,7 @@ public class playerMovement : MonoBehaviour
         Jump();
 
         CheckBorders();
+        CheckEnd();
     }
 
     void Move()
@@ -61,7 +65,7 @@ public class playerMovement : MonoBehaviour
             animator.SetTrigger("jumpTrigger");
         }
 
-        animator.SetBool("isFalling", rigidBody.velocity.y < 0);
+        animator.SetBool("isFalling", rigidBody.velocity.y < -speedError);
     }
 
     void CheckBorders()
@@ -71,5 +75,11 @@ public class playerMovement : MonoBehaviour
 
         if (transform.position.x > maxX)
             transform.position = new Vector2(maxX, transform.position.y);
+    }
+
+    void CheckEnd()
+    {
+        if (endManager.isAtDoor && Input.GetKey(KeyCode.E))
+            endManager.OpenDoor();
     }
 }
